@@ -90,11 +90,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-indigo-50/60 dark:bg-slate-700/40 p-3 rounded-xl border border-indigo-100 dark:border-slate-600">
             <div class="flex items-center justify-between mb-1">
-              <label for="hourlyRateInput" class="text-xs font-bold text-indigo-900 dark:text-indigo-200">每小時時薪 (NT\$)</label>
+              <label for="hourlyRateInput" class="text-xs font-bold text-indigo-900 dark:text-indigo-200">每小時時薪 (NT$)</label>
               <span class="text-[10px] text-indigo-500 dark:text-indigo-300">自填</span>
             </div>
             <div class="relative">
-              <span class="absolute left-3 top-2 text-sm text-slate-400 font-bold">\$</span>
+              <span class="absolute left-3 top-2 text-sm text-slate-400 font-bold">$</span>
               <input type="number" id="hourlyRateInput" value="190" min="0" step="1" oninput="updateSalaryConfig()"
                 class="w-full pl-7 pr-3 py-1.5 text-base font-bold text-indigo-700 dark:text-indigo-300 bg-white dark:bg-slate-800 border border-indigo-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
@@ -102,11 +102,11 @@
 
           <div class="bg-emerald-50/60 dark:bg-slate-700/40 p-3 rounded-xl border border-emerald-100 dark:border-slate-600">
             <div class="flex items-center justify-between mb-1">
-              <label for="allowanceInput" class="text-xs font-bold text-emerald-900 dark:text-emerald-200">全勤 / 津貼加項 (NT\$)</label>
+              <label for="allowanceInput" class="text-xs font-bold text-emerald-900 dark:text-emerald-200">全勤 / 津貼加項 (NT$)</label>
               <span class="text-[10px] text-emerald-500 dark:text-emerald-300">加項</span>
             </div>
             <div class="relative">
-              <span class="absolute left-3 top-2 text-sm text-slate-400 font-bold">\$</span>
+              <span class="absolute left-3 top-2 text-sm text-slate-400 font-bold">$</span>
               <input type="number" id="allowanceInput" value="0" min="0" step="10" oninput="updateSalaryConfig()"
                 class="w-full pl-7 pr-3 py-1.5 text-base font-bold text-emerald-700 dark:text-emerald-300 bg-white dark:bg-slate-800 border border-emerald-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
             </div>
@@ -114,11 +114,11 @@
 
           <div class="bg-rose-50/60 dark:bg-slate-700/40 p-3 rounded-xl border border-rose-100 dark:border-slate-600">
             <div class="flex items-center justify-between mb-1">
-              <label for="insuranceInput" class="text-xs font-bold text-rose-900 dark:text-rose-200">勞健保 / 扣款 (NT\$)</label>
+              <label for="insuranceInput" class="text-xs font-bold text-rose-900 dark:text-rose-200">勞健保 / 扣款 (NT$)</label>
               <span class="text-[10px] text-rose-500 dark:text-rose-300">減項</span>
             </div>
             <div class="relative">
-              <span class="absolute left-3 top-2 text-sm text-slate-400 font-bold">\$</span>
+              <span class="absolute left-3 top-2 text-sm text-slate-400 font-bold">$</span>
               <input type="number" id="insuranceInput" value="0" min="0" step="10" oninput="updateSalaryConfig()"
                 class="w-full pl-7 pr-3 py-1.5 text-base font-bold text-rose-700 dark:text-rose-300 bg-white dark:bg-slate-800 border border-rose-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-rose-500">
             </div>
@@ -150,18 +150,18 @@
       <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
         <p class="text-xs text-slate-500 dark:text-slate-400 font-medium" id="statHoursTitle">一般工時</p>
         <p class="mt-2 text-2xl font-bold text-slate-800 dark:text-white" id="statRegularHours">0.0 <span class="text-xs font-normal text-slate-400">小時</span></p>
-        <p class="mt-1 text-[11px] text-slate-400">工資試算: NT\$ <span id="statBaseSalary">0</span></p>
+        <p class="mt-1 text-[11px] text-slate-400">工資試算: NT$ <span id="statBaseSalary">0</span></p>
       </div>
 
       <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm" id="cardOvertimeBox">
         <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">加班時數 (加成)</p>
         <p class="mt-2 text-2xl font-bold text-amber-600 dark:text-amber-400" id="statOvertimeHours">0.0 <span class="text-xs font-normal text-slate-400">小時</span></p>
-        <p class="mt-1 text-[11px] text-slate-400">加班費: NT\$ <span id="statOvertimePay">0</span></p>
+        <p class="mt-1 text-[11px] text-slate-400">加班費: NT$ <span id="statOvertimePay">0</span></p>
       </div>
 
       <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm ring-1 ring-brand-500/30">
         <p class="text-xs font-bold text-brand-600 dark:text-brand-400">本月預估實領金額</p>
-        <p class="mt-2 text-2xl font-black text-brand-600 dark:text-brand-400" id="statNetSalary">NT\$ 0</p>
+        <p class="mt-2 text-2xl font-black text-brand-600 dark:text-brand-400" id="statNetSalary">NT$ 0</p>
         <p class="mt-1 text-[11px] text-slate-400">全月總工時: <span id="statTotalHours">0.0</span> 小時</p>
       </div>
     </section>
@@ -243,4 +243,683 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">班別名稱</label>
-            <input type="text" id="shiftTitle" required placeholder="如：早班、外送
+            <input type="text" id="shiftTitle" required placeholder="如：早班、外送兼職"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">當日屬性</label>
+            <select id="shiftDayType" onchange="previewHours()"
+              class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+              <option value="normal">平日出勤</option>
+              <option value="restday">休息日出勤</option>
+              <option value="holiday">國定假日出勤</option>
+              <option value="leave">例假 / 休假 (不計工時)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">上班時間</label>
+            <input type="time" id="shiftStart" onchange="previewHours()"
+              class="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">下班時間</label>
+            <input type="time" id="shiftEnd" onchange="previewHours()"
+              class="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">休息時間 (分)</label>
+            <input type="number" id="shiftRest" value="60" min="0" step="5" oninput="previewHours()"
+              class="w-full px-2.5 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- 試算即時預覽 -->
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs">
+          <span class="text-slate-500 dark:text-slate-400">當日實質工時：</span>
+          <span class="font-bold text-sm text-brand-600 dark:text-brand-400"><span id="previewTotal">0.0</span> 小時</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">備註說明</label>
+          <input type="text" id="shiftNote" placeholder="工作筆記、當日備忘..."
+            class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+          <button type="button" id="btnDeleteShift" onclick="deleteCurrentShift()" class="px-3 py-2 text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 rounded-lg transition hidden">
+            刪除排班
+          </button>
+          <div class="flex items-center gap-2 ml-auto">
+            <button type="button" onclick="closeShiftModal()" class="px-4 py-2 text-xs font-semibold border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition">
+              取消
+            </button>
+            <button type="submit" class="px-5 py-2 text-xs font-bold bg-brand-600 hover:bg-brand-700 text-white rounded-lg shadow-sm transition">
+              儲存
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 彈窗 2：常用班別自訂管理 Modal -->
+  <div id="presetManagerModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[90vh] flex flex-col space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
+        <div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white">管理常用班別</h3>
+          <p class="text-xs text-slate-400">新增或刪除班別，快速帶入時段</p>
+        </div>
+        <button onclick="closePresetManagerModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold">✕</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto pr-1 space-y-2" id="presetListContainer"></div>
+
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-700 space-y-3">
+        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300">＋ 新增班別</h4>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <input type="text" id="newPresetName" placeholder="班別名稱 (如: 兼職A)"
+            class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          <input type="number" id="newPresetRest" placeholder="休息時間 (分鐘)" value="30" min="0" step="5"
+            class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          <div>
+            <span class="text-[10px] text-slate-400 block mb-1">上班時間</span>
+            <input type="time" id="newPresetStart" value="09:00"
+              class="w-full px-2 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          </div>
+          <div>
+            <span class="text-[10px] text-slate-400 block mb-1">下班時間</span>
+            <input type="time" id="newPresetEnd" value="18:00"
+              class="w-full px-2 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
+          </div>
+        </div>
+        <button type="button" onclick="addNewPreset()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition shadow-sm">
+          確認新增至常用清單
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const DEFAULT_PRESETS = [
+      { id: 'p_morning', name: '早班', start: '08:00', end: '17:00', rest: 60, dayType: 'normal' },
+      { id: 'p_middle',  name: '中班', start: '13:00', end: '21:30', rest: 30, dayType: 'normal' },
+      { id: 'p_evening', name: '晚班', start: '17:00', end: '23:00', rest: 0,  dayType: 'normal' },
+      { id: 'p_night',   name: '大夜', start: '23:00', end: '07:00', rest: 60, dayType: 'normal' },
+      { id: 'p_off',     name: '例休', start: '',      end: '',      rest: 0,  dayType: 'leave' }
+    ];
+
+    let currentDate = new Date();
+    let shiftRecords = JSON.parse(localStorage.getItem('shift_work_records')) || {};
+    let shiftPresets = JSON.parse(localStorage.getItem('shift_custom_presets')) || DEFAULT_PRESETS;
+    let salaryConfig = JSON.parse(localStorage.getItem('shift_salary_config')) || {
+      hourlyRate: 190,
+      allowance: 0,
+      insurance: 0,
+      disableOvertime: false
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeIcon').innerText = '☀️';
+      }
+
+      document.getElementById('hourlyRateInput').value = salaryConfig.hourlyRate;
+      document.getElementById('allowanceInput').value = salaryConfig.allowance;
+      document.getElementById('insuranceInput').value = salaryConfig.insurance;
+      document.getElementById('disableOvertimeToggle').checked = !!salaryConfig.disableOvertime;
+      updateOvertimeUI();
+
+      renderPresetButtons();
+      renderAll();
+    });
+
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+    }
+
+    // 常用班別儲存與動態生成
+    function savePresetsToStorage() {
+      localStorage.setItem('shift_custom_presets', JSON.stringify(shiftPresets));
+      renderPresetButtons();
+    }
+
+    function renderPresetButtons() {
+      const container = document.getElementById('quickPresetContainer');
+      if (!container) return;
+      container.innerHTML = shiftPresets.map(p => `
+        <button type="button" onclick="applyPreset('${p.id}')"
+          class="px-2.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/60 hover:bg-brand-50 hover:border-brand-300 dark:hover:bg-slate-600 transition flex items-center gap-1">
+          <span class="font-bold text-slate-800 dark:text-slate-100">${p.name}</span>
+          ${p.start ? `<span class="text-[10px] text-slate-400">(${p.start}-${p.end})</span>` : '<span class="text-[10px] text-rose-400">(休)</span>'}
+        </button>
+      `).join('');
+    }
+
+    function applyPreset(presetId) {
+      const p = shiftPresets.find(item => item.id === presetId);
+      if (!p) return;
+      document.getElementById('shiftTitle').value = p.name;
+      document.getElementById('shiftStart').value = p.start;
+      document.getElementById('shiftEnd').value = p.end;
+      document.getElementById('shiftRest').value = p.rest;
+      document.getElementById('shiftDayType').value = p.dayType || 'normal';
+      previewHours();
+    }
+
+    function openPresetManagerModal() {
+      renderPresetManagerList();
+      document.getElementById('presetManagerModal').classList.remove('hidden');
+    }
+
+    function closePresetManagerModal() {
+      document.getElementById('presetManagerModal').classList.add('hidden');
+    }
+
+    function renderPresetManagerList() {
+      const listEl = document.getElementById('presetListContainer');
+      listEl.innerHTML = shiftPresets.map(p => `
+        <div class="flex items-center justify-between p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-700/40">
+          <div>
+            <span class="font-bold text-xs text-slate-800 dark:text-slate-100">${p.name}</span>
+            <p class="text-[11px] text-slate-400">
+              ${p.start ? `${p.start} ~ ${p.end} (休 ${p.rest} 分)` : '全日休假'}
+            </p>
+          </div>
+          <button onclick="deletePreset('${p.id}')" class="text-rose-500 hover:text-rose-700 text-xs px-2 py-1 rounded transition font-medium">刪除</button>
+        </div>
+      `).join('');
+    }
+
+    function addNewPreset() {
+      const name = document.getElementById('newPresetName').value.trim();
+      const start = document.getElementById('newPresetStart').value;
+      const end = document.getElementById('newPresetEnd').value;
+      const rest = parseInt(document.getElementById('newPresetRest').value) || 0;
+
+      if (!name) {
+        alert('請輸入班別名稱');
+        return;
+      }
+
+      shiftPresets.push({
+        id: 'preset_' + Date.now(),
+        name,
+        start,
+        end,
+        rest,
+        dayType: (!start && !end) ? 'leave' : 'normal'
+      });
+
+      savePresetsToStorage();
+      renderPresetManagerList();
+      document.getElementById('newPresetName').value = '';
+    }
+
+    function deletePreset(id) {
+      if (shiftPresets.length <= 1) {
+        alert('請至少保留一個常用班別');
+        return;
+      }
+      shiftPresets = shiftPresets.filter(p => p.id !== id);
+      savePresetsToStorage();
+      renderPresetManagerList();
+    }
+
+    // 薪資設定與加班開關切換
+    function updateSalaryConfig() {
+      salaryConfig.hourlyRate = Math.max(0, parseFloat(document.getElementById('hourlyRateInput').value) || 0);
+      salaryConfig.allowance = Math.max(0, parseFloat(document.getElementById('allowanceInput').value) || 0);
+      salaryConfig.insurance = Math.max(0, parseFloat(document.getElementById('insuranceInput').value) || 0);
+      localStorage.setItem('shift_salary_config', JSON.stringify(salaryConfig));
+      calculateAndRenderSummary();
+      renderListView();
+    }
+
+    function toggleOvertimeConfig() {
+      salaryConfig.disableOvertime = document.getElementById('disableOvertimeToggle').checked;
+      localStorage.setItem('shift_salary_config', JSON.stringify(salaryConfig));
+      updateOvertimeUI();
+      renderAll();
+    }
+
+    function updateOvertimeUI() {
+      const badge = document.getElementById('overtimeStatusBadge');
+      const otCard = document.getElementById('cardOvertimeBox');
+      const hoursTitle = document.getElementById('statHoursTitle');
+
+      if (salaryConfig.disableOvertime) {
+        badge.innerText = '加班已關閉（純工時計算）';
+        badge.className = 'text-[11px] px-2 py-0.5 rounded font-medium bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300';
+        otCard.classList.add('opacity-40');
+        hoursTitle.innerText = '全月總工時';
+      } else {
+        badge.innerText = '勞基法加班開啟中';
+        badge.className = 'text-[11px] px-2 py-0.5 rounded font-medium bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300';
+        otCard.classList.remove('opacity-40');
+        hoursTitle.innerText = '一般工時';
+      }
+    }
+
+    function changeMonth(delta) {
+      currentDate.setMonth(currentDate.getMonth() + delta);
+      renderAll();
+    }
+
+    function goToCurrentMonth() {
+      currentDate = new Date();
+      renderAll();
+    }
+
+    function renderAll() {
+      const y = currentDate.getFullYear();
+      const m = currentDate.getMonth() + 1;
+      document.getElementById('currentMonthLabel').innerText = `${y} 年 ${String(m).padStart(2, '0')} 月`;
+      renderCalendar();
+      renderListView();
+      calculateAndRenderSummary();
+    }
+
+    // 工時計算核心（支援關閉加班）
+    function calculateShiftDuration(startStr, endStr, restMin, dayType) {
+      if (dayType === 'leave' || !startStr || !endStr) {
+        return { total: 0, regular: 0, ot1: 0, ot2: 0, ot3: 0, isLeave: true };
+      }
+
+      const [sH, sM] = startStr.split(':').map(Number);
+      const [eH, eM] = endStr.split(':').map(Number);
+
+      let startMin = sH * 60 + sM;
+      let endMin = eH * 60 + eM;
+
+      // 跨午夜
+      if (endMin <= startMin) endMin += 24 * 60;
+
+      let netMinutes = endMin - startMin - (restMin || 0);
+      if (netMinutes < 0) netMinutes = 0;
+
+      const totalHours = Math.round((netMinutes / 60) * 10) / 10;
+
+      // 關鍵：如果關閉加班計算，所有時數皆算一般時薪工時
+      if (salaryConfig.disableOvertime) {
+        return { total: totalHours, regular: totalHours, ot1: 0, ot2: 0, ot3: 0, isLeave: false };
+      }
+
+      let regular = 0, ot1 = 0, ot2 = 0, ot3 = 0;
+      if (dayType === 'normal') {
+        if (totalHours <= 8) {
+          regular = totalHours;
+        } else if (totalHours <= 10) {
+          regular = 8;
+          ot1 = totalHours - 8;
+        } else {
+          regular = 8;
+          ot1 = 2;
+          ot2 = totalHours - 10;
+        }
+      } else if (dayType === 'restday') {
+        if (totalHours <= 2) {
+          ot1 = totalHours;
+        } else if (totalHours <= 8) {
+          ot1 = 2;
+          ot2 = totalHours - 2;
+        } else {
+          ot1 = 2;
+          ot2 = 6;
+          ot3 = totalHours - 8;
+        }
+      } else if (dayType === 'holiday') {
+        if (totalHours <= 8) {
+          regular = totalHours;
+        } else if (totalHours <= 10) {
+          regular = 8;
+          ot1 = totalHours - 8;
+        } else {
+          regular = 8;
+          ot1 = 2;
+          ot2 = totalHours - 10;
+        }
+      }
+
+      return { total: totalHours, regular, ot1, ot2, ot3, isLeave: false };
+    }
+
+    function previewHours() {
+      const start = document.getElementById('shiftStart').value;
+      const end = document.getElementById('shiftEnd').value;
+      const rest = parseInt(document.getElementById('shiftRest').value) || 0;
+      const dayType = document.getElementById('shiftDayType').value;
+      const res = calculateShiftDuration(start, end, rest, dayType);
+      document.getElementById('previewTotal').innerText = res.total.toFixed(1);
+    }
+
+    // 日曆渲染：在日曆上直接顯示當天時數
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      grid.innerHTML = '';
+
+      const y = currentDate.getFullYear();
+      const m = currentDate.getMonth();
+      const firstDayIndex = new Date(y, m, 1).getDay();
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      for (let i = 0; i < firstDayIndex; i++) {
+        const blank = document.createElement('div');
+        blank.className = "bg-slate-50/50 dark:bg-slate-800/30 rounded-xl min-h-[90px] border border-transparent";
+        grid.appendChild(blank);
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dateStr = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const shift = shiftRecords[dateStr];
+        const isToday = (dateStr === todayStr);
+
+        const cell = document.createElement('div');
+        cell.className = `p-2 rounded-xl border transition min-h-[95px] flex flex-col justify-between cursor-pointer select-none ${
+          isToday 
+            ? 'border-brand-500 bg-brand-50/20 dark:bg-brand-950/20' 
+            : 'border-slate-100 dark:border-slate-700/60 bg-white dark:bg-slate-800 hover:border-brand-300 dark:hover:border-slate-600'
+        }`;
+        cell.onclick = () => openShiftModal(dateStr);
+
+        let badgeHtml = '';
+        let hoursBadge = '';
+
+        if (shift) {
+          const hoursCalc = calculateShiftDuration(shift.start, shift.end, shift.rest, shift.dayType);
+          const isLeave = shift.dayType === 'leave';
+
+          // 當天時數醒目標籤（顯示在日期旁）
+          if (isLeave) {
+            hoursBadge = `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300">休假</span>`;
+          } else {
+            hoursBadge = `<span class="text-[11px] font-black px-1.5 py-0.5 rounded bg-brand-100 text-brand-700 dark:bg-brand-950/70 dark:text-brand-300">${hoursCalc.total}h</span>`;
+          }
+
+          badgeHtml = `
+            <div class="mt-1 p-1.5 rounded-lg text-[11px] leading-tight ${
+              isLeave 
+                ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300' 
+                : 'bg-brand-50 text-brand-700 dark:bg-slate-700 dark:text-brand-300 border border-brand-100 dark:border-slate-600'
+            }">
+              <div class="font-bold truncate">${shift.title}</div>
+              ${!isLeave ? `<div class="text-[10px] opacity-75">${shift.start}-${shift.end}</div>` : ''}
+            </div>
+          `;
+        }
+
+        cell.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1">
+              <span class="text-xs font-bold ${isToday ? 'text-brand-600 dark:text-brand-400 font-black' : 'text-slate-700 dark:text-slate-300'}">${d}</span>
+              ${isToday ? '<span class="text-[9px] px-1 bg-brand-600 text-white rounded">今</span>' : ''}
+            </div>
+            ${hoursBadge}
+          </div>
+          <div class="flex-1">${badgeHtml}</div>
+        `;
+
+        grid.appendChild(cell);
+      }
+    }
+
+    // 清單表格渲染
+    function renderListView() {
+      const tbody = document.getElementById('listTableBody');
+      tbody.innerHTML = '';
+
+      const y = currentDate.getFullYear();
+      const m = currentDate.getMonth() + 1;
+      const monthPrefix = `${y}-${String(m).padStart(2, '0')}`;
+
+      const matchedDates = Object.keys(shiftRecords)
+        .filter(d => d.startsWith(monthPrefix))
+        .sort();
+
+      if (matchedDates.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">本月份尚未有排班資料。</td></tr>`;
+        return;
+      }
+
+      matchedDates.forEach(dateStr => {
+        const s = shiftRecords[dateStr];
+        const res = calculateShiftDuration(s.start, s.end, s.rest, s.dayType);
+        const rate = salaryConfig.hourlyRate;
+        let dailyPay = 0;
+
+        if (salaryConfig.disableOvertime) {
+          dailyPay = res.total * rate;
+        } else {
+          if (s.dayType === 'normal') {
+            dailyPay = (res.regular * rate) + (res.ot1 * rate * 1.34) + (res.ot2 * rate * 1.67);
+          } else if (s.dayType === 'restday') {
+            dailyPay = (res.ot1 * rate * 1.34) + (res.ot2 * rate * 1.67) + (res.ot3 * rate * 2.67);
+          } else if (s.dayType === 'holiday') {
+            dailyPay = (res.regular * rate * 2) + (res.ot1 * rate * 1.34) + (res.ot2 * rate * 1.67);
+          }
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50 dark:hover:bg-slate-700/30 transition";
+        tr.innerHTML = `
+          <td class="p-3 font-semibold text-slate-800 dark:text-slate-200">${dateStr}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded text-[11px] font-bold ${s.dayType === 'leave' ? 'bg-rose-100 text-rose-700' : 'bg-indigo-100 text-indigo-700 dark:bg-slate-700 dark:text-indigo-300'}">${s.title}</span></td>
+          <td class="p-3 text-slate-600 dark:text-slate-300">${s.start ? `${s.start} - ${s.end}` : '--'}</td>
+          <td class="p-3 text-slate-500">${s.rest || 0} 分</td>
+          <td class="p-3 font-bold text-slate-700 dark:text-slate-200">${res.total.toFixed(1)} 小時</td>
+          <td class="p-3 font-bold text-brand-600 dark:text-brand-400">NT$ ${Math.round(dailyPay).toLocaleString()}</td>
+          <td class="p-3 text-slate-400 truncate max-w-[120px]">${s.note || ''}</td>
+          <td class="p-3 text-right">
+            <button onclick="openShiftModal('${dateStr}')" class="text-xs text-brand-600 hover:text-brand-800 font-semibold mr-2">編輯</button>
+            <button onclick="deleteShiftByDate('${dateStr}')" class="text-xs text-rose-500 hover:text-rose-700 font-semibold">刪除</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 全月彙總結算
+    function calculateAndRenderSummary() {
+      const y = currentDate.getFullYear();
+      const m = currentDate.getMonth() + 1;
+      const monthPrefix = `${y}-${String(m).padStart(2, '0')}`;
+
+      let workDays = 0;
+      let offDays = 0;
+      let totalRegular = 0;
+      let totalOt1 = 0;
+      let totalOt2 = 0;
+      let totalOt3 = 0;
+      let holidayRegular = 0;
+
+      Object.keys(shiftRecords)
+        .filter(d => d.startsWith(monthPrefix))
+        .forEach(d => {
+          const s = shiftRecords[d];
+          const res = calculateShiftDuration(s.start, s.end, s.rest, s.dayType);
+
+          if (s.dayType === 'leave') {
+            offDays++;
+          } else {
+            workDays++;
+            if (!salaryConfig.disableOvertime && s.dayType === 'holiday') {
+              holidayRegular += res.regular;
+            } else {
+              totalRegular += res.regular;
+            }
+            totalOt1 += res.ot1;
+            totalOt2 += res.ot2;
+            totalOt3 += res.ot3;
+          }
+        });
+
+      const totalOvertime = totalOt1 + totalOt2 + totalOt3;
+      const totalAllHours = totalRegular + holidayRegular + totalOvertime;
+      const rate = salaryConfig.hourlyRate;
+
+      let basePay = 0;
+      let overtimePay = 0;
+
+      if (salaryConfig.disableOvertime) {
+        basePay = Math.round(totalAllHours * rate);
+        overtimePay = 0;
+      } else {
+        basePay = Math.round((totalRegular * rate) + (holidayRegular * rate * 2));
+        overtimePay = Math.round((totalOt1 * rate * 1.34) + (totalOt2 * rate * 1.67) + (totalOt3 * rate * 2.67));
+      }
+
+      const netSalary = basePay + overtimePay + salaryConfig.allowance - salaryConfig.insurance;
+
+      document.getElementById('statWorkDays').innerHTML = `${workDays} <span class="text-xs font-normal text-slate-400">天</span>`;
+      document.getElementById('statOffDays').innerText = offDays;
+      document.getElementById('statRegularHours').innerHTML = `${(totalRegular + holidayRegular).toFixed(1)} <span class="text-xs font-normal text-slate-400">小時</span>`;
+      document.getElementById('statBaseSalary').innerText = basePay.toLocaleString();
+      document.getElementById('statOvertimeHours').innerHTML = `${totalOvertime.toFixed(1)} <span class="text-xs font-normal text-slate-400">小時</span>`;
+      document.getElementById('statOvertimePay').innerText = overtimePay.toLocaleString();
+      document.getElementById('statTotalHours').innerText = totalAllHours.toFixed(1);
+      document.getElementById('statNetSalary').innerText = `NT$ ${Math.max(0, netSalary).toLocaleString()}`;
+    }
+
+    function openShiftModal(dateStr) {
+      const defaultDate = dateStr || `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-01`;
+      document.getElementById('formDate').value = defaultDate;
+      document.getElementById('modalDateTitle').innerText = `排班設定 (${defaultDate})`;
+
+      const existing = shiftRecords[defaultDate];
+      if (existing) {
+        document.getElementById('shiftTitle').value = existing.title || '';
+        document.getElementById('shiftStart').value = existing.start || '';
+        document.getElementById('shiftEnd').value = existing.end || '';
+        document.getElementById('shiftRest').value = existing.rest !== undefined ? existing.rest : 60;
+        document.getElementById('shiftDayType').value = existing.dayType || 'normal';
+        document.getElementById('shiftNote').value = existing.note || '';
+        document.getElementById('btnDeleteShift').classList.remove('hidden');
+      } else {
+        const firstPreset = shiftPresets[0] || { name: '早班', start: '08:00', end: '17:00', rest: 60, dayType: 'normal' };
+        document.getElementById('shiftTitle').value = firstPreset.name;
+        document.getElementById('shiftStart').value = firstPreset.start;
+        document.getElementById('shiftEnd').value = firstPreset.end;
+        document.getElementById('shiftRest').value = firstPreset.rest;
+        document.getElementById('shiftDayType').value = firstPreset.dayType || 'normal';
+        document.getElementById('shiftNote').value = '';
+        document.getElementById('btnDeleteShift').classList.add('hidden');
+      }
+
+      previewHours();
+      document.getElementById('shiftModal').classList.remove('hidden');
+    }
+
+    function closeShiftModal() {
+      document.getElementById('shiftModal').classList.add('hidden');
+    }
+
+    function saveShiftRecord(e) {
+      e.preventDefault();
+      const dateStr = document.getElementById('formDate').value;
+      const title = document.getElementById('shiftTitle').value.trim();
+      const start = document.getElementById('shiftStart').value;
+      const end = document.getElementById('shiftEnd').value;
+      const rest = parseInt(document.getElementById('shiftRest').value) || 0;
+      const dayType = document.getElementById('shiftDayType').value;
+      const note = document.getElementById('shiftNote').value.trim();
+
+      shiftRecords[dateStr] = { title, start, end, rest, dayType, note };
+      localStorage.setItem('shift_work_records', JSON.stringify(shiftRecords));
+
+      closeShiftModal();
+      renderAll();
+    }
+
+    function deleteCurrentShift() {
+      const dateStr = document.getElementById('formDate').value;
+      deleteShiftByDate(dateStr);
+      closeShiftModal();
+    }
+
+    function deleteShiftByDate(dateStr) {
+      if (confirm(`確定要刪除 ${dateStr} 的排班紀錄嗎？`)) {
+        delete shiftRecords[dateStr];
+        localStorage.setItem('shift_work_records', JSON.stringify(shiftRecords));
+        renderAll();
+      }
+    }
+
+    function switchView(viewName) {
+      const calContainer = document.getElementById('calendarViewContainer');
+      const listContainer = document.getElementById('listViewContainer');
+      const tabCal = document.getElementById('tabBtnCalendar');
+      const tabList = document.getElementById('tabBtnList');
+
+      if (viewName === 'calendar') {
+        calContainer.classList.remove('hidden');
+        listContainer.classList.add('hidden');
+        tabCal.className = "px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200 dark:border-slate-700";
+        tabList.className = "px-4 py-2 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white";
+      } else {
+        calContainer.classList.add('hidden');
+        listContainer.classList.remove('hidden');
+        tabList.className = "px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200 dark:border-slate-700";
+        tabCal.className = "px-4 py-2 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white";
+      }
+    }
+
+    function exportCSV() {
+      const y = currentDate.getFullYear();
+      const m = currentDate.getMonth() + 1;
+      const monthPrefix = `${y}-${String(m).padStart(2, '0')}`;
+      const dates = Object.keys(shiftRecords).filter(d => d.startsWith(monthPrefix)).sort();
+
+      if (dates.length === 0) {
+        alert('本月份尚無排班資料！');
+        return;
+      }
+
+      let csv = '\uFEFF日期,班別,上班時間,下班時間,休息分鐘,實際總工時,備註\n';
+      dates.forEach(d => {
+        const s = shiftRecords[d];
+        const res = calculateShiftDuration(s.start, s.end, s.rest, s.dayType);
+        csv += `"${d}","${s.title}","${s.start || ''}","${s.end || ''}","${s.rest || 0}","${res.total}","${(s.note || '').replace(/"/g, '""')}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `班表工時明細_${monthPrefix}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function copySummaryText() {
+      const y = currentDate.getFullYear();
+      const m = currentDate.getMonth() + 1;
+      const workDays = document.getElementById('statWorkDays').innerText;
+      const totHours = document.getElementById('statTotalHours').innerText;
+      const netPay = document.getElementById('statNetSalary').innerText;
+
+      const summary = `【${y}年${m}月 工時與薪資結算】\n` +
+        `• 時薪單價：NT$ ${salaryConfig.hourlyRate}/hr\n` +
+        `• 加班機制：${salaryConfig.disableOvertime ? '已關閉 (全純工時)' : '勞基法加成'}\n` +
+        `• 總出勤天數：${workDays}\n` +
+        `• 當月總工時：${totHours} 小時\n` +
+        `• 津貼加項：NT$ ${salaryConfig.allowance.toLocaleString()}\n` +
+        `• 扣款減項：NT$ ${salaryConfig.insurance.toLocaleString()}\n` +
+        `--------------------\n` +
+        `★ 應領總額：${netPay}`;
+
+      navigator.clipboard.writeText(summary).then(() => {
+        alert('結算摘要已複製到剪貼簿！');
+      }).catch(() => {
+        alert('複製失敗，請手動複製。');
+      });
+    }
+  </script>
+</body>
+</html>
