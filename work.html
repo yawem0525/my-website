@@ -43,7 +43,7 @@
         <span class="text-2xl">⏱️</span>
         <div>
           <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">工時與薪資計算系統</h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400">時薪純工時/加班自選 • 當日工時月曆顯示 • 常用班別自訂</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">時薪純工時/加班自選 • 當日工時月曆顯示 • 常用班別自訂與編輯</p>
         </div>
       </div>
 
@@ -169,7 +169,7 @@
     <!-- 檢視切換分頁 -->
     <div class="flex items-center gap-2 border-b border-slate-200 dark:border-slate-700 pb-2">
       <button onclick="switchView('calendar')" id="tabBtnCalendar" class="px-4 py-2 text-xs font-bold rounded-lg bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm border border-slate-200 dark:border-slate-700">
-        📅 日曆檢視 (直接顯示每日工時)
+        📅 日曆檢視 (顯示每日工時)
       </button>
       <button onclick="switchView('list')" id="tabBtnList" class="px-4 py-2 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
         📝 清單明細表
@@ -231,7 +231,7 @@
         <div class="flex items-center justify-between mb-2">
           <label class="text-xs font-bold text-slate-500 dark:text-slate-400">常用班別選取：</label>
           <button type="button" onclick="openPresetManagerModal()" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold flex items-center gap-1">
-            ⚙️ 自訂/增刪班別
+            ⚙️ 自訂/編輯班別
           </button>
         </div>
         <div id="quickPresetContainer" class="flex flex-wrap gap-1.5"></div>
@@ -243,7 +243,7 @@
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">班別名稱</label>
-            <input type="text" id="shiftTitle" required placeholder="如：早班、外送兼職"
+            <input type="text" id="shiftTitle" required placeholder="如：早班、兼職"
               class="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:ring-2 focus:ring-brand-500 focus:outline-none">
           </div>
           <div>
@@ -305,21 +305,28 @@
     </div>
   </div>
 
-  <!-- 彈窗 2：常用班別自訂管理 Modal -->
+  <!-- 彈窗 2：常用班別自訂與直接編輯 Modal -->
   <div id="presetManagerModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
     <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 max-h-[90vh] flex flex-col space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
         <div>
           <h3 class="text-base font-bold text-slate-900 dark:text-white">管理常用班別</h3>
-          <p class="text-xs text-slate-400">新增或刪除班別，快速帶入時段</p>
+          <p class="text-xs text-slate-400">點擊「編輯」可直接修改時段與名稱</p>
         </div>
         <button onclick="closePresetManagerModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold">✕</button>
       </div>
 
+      <!-- 現有班別清單 (支援編輯與刪除) -->
       <div class="flex-1 overflow-y-auto pr-1 space-y-2" id="presetListContainer"></div>
 
+      <!-- 新增 / 編輯 表單 -->
       <div class="pt-3 border-t border-slate-100 dark:border-slate-700 space-y-3">
-        <h4 class="text-xs font-bold text-slate-700 dark:text-slate-300">＋ 新增班別</h4>
+        <div class="flex items-center justify-between">
+          <h4 id="presetFormTitle" class="text-xs font-bold text-slate-700 dark:text-slate-300">＋ 新增班別</h4>
+          <button type="button" id="btnCancelEditPreset" onclick="cancelEditPreset()" class="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hidden">
+            ✕ 取消編輯
+          </button>
+        </div>
         <div class="grid grid-cols-2 gap-2 text-xs">
           <input type="text" id="newPresetName" placeholder="班別名稱 (如: 兼職A)"
             class="px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
@@ -336,7 +343,7 @@
               class="w-full px-2 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:outline-none">
           </div>
         </div>
-        <button type="button" onclick="addNewPreset()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition shadow-sm">
+        <button type="button" id="btnSavePreset" onclick="savePreset()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold transition shadow-sm">
           確認新增至常用清單
         </button>
       </div>
@@ -361,6 +368,9 @@
       insurance: 0,
       disableOvertime: false
     };
+
+    // 常用班別編輯狀態管理
+    let editingPresetId = null;
 
     window.addEventListener('DOMContentLoaded', () => {
       if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -415,10 +425,12 @@
 
     function openPresetManagerModal() {
       renderPresetManagerList();
+      cancelEditPreset();
       document.getElementById('presetManagerModal').classList.remove('hidden');
     }
 
     function closePresetManagerModal() {
+      cancelEditPreset();
       document.getElementById('presetManagerModal').classList.add('hidden');
     }
 
@@ -432,12 +444,45 @@
               ${p.start ? `${p.start} ~ ${p.end} (休 ${p.rest} 分)` : '全日休假'}
             </p>
           </div>
-          <button onclick="deletePreset('${p.id}')" class="text-rose-500 hover:text-rose-700 text-xs px-2 py-1 rounded transition font-medium">刪除</button>
+          <div class="flex items-center gap-1">
+            <button onclick="editPreset('${p.id}')" class="text-brand-600 hover:text-brand-700 text-xs px-2 py-1 rounded transition font-semibold">編輯</button>
+            <button onclick="deletePreset('${p.id}')" class="text-rose-500 hover:text-rose-700 text-xs px-2 py-1 rounded transition font-medium">刪除</button>
+          </div>
         </div>
       `).join('');
     }
 
-    function addNewPreset() {
+    // 點擊「編輯」將特定班別帶入表單修改
+    function editPreset(id) {
+      const p = shiftPresets.find(item => item.id === id);
+      if (!p) return;
+
+      editingPresetId = id;
+      document.getElementById('newPresetName').value = p.name;
+      document.getElementById('newPresetStart').value = p.start;
+      document.getElementById('newPresetEnd').value = p.end;
+      document.getElementById('newPresetRest').value = p.rest;
+
+      document.getElementById('presetFormTitle').innerText = `✏️ 編輯班別：${p.name}`;
+      document.getElementById('btnSavePreset').innerText = '儲存修改';
+      document.getElementById('btnCancelEditPreset').classList.remove('hidden');
+    }
+
+    // 取消編輯模式
+    function cancelEditPreset() {
+      editingPresetId = null;
+      document.getElementById('newPresetName').value = '';
+      document.getElementById('newPresetStart').value = '09:00';
+      document.getElementById('newPresetEnd').value = '18:00';
+      document.getElementById('newPresetRest').value = '30';
+
+      document.getElementById('presetFormTitle').innerText = '＋ 新增班別';
+      document.getElementById('btnSavePreset').innerText = '確認新增至常用清單';
+      document.getElementById('btnCancelEditPreset').classList.add('hidden');
+    }
+
+    // 儲存班別（自動區分新增或修改）
+    function savePreset() {
       const name = document.getElementById('newPresetName').value.trim();
       const start = document.getElementById('newPresetStart').value;
       const end = document.getElementById('newPresetEnd').value;
@@ -448,18 +493,31 @@
         return;
       }
 
-      shiftPresets.push({
-        id: 'preset_' + Date.now(),
-        name,
-        start,
-        end,
-        rest,
-        dayType: (!start && !end) ? 'leave' : 'normal'
-      });
+      if (editingPresetId) {
+        // 更新現有班別
+        const target = shiftPresets.find(p => p.id === editingPresetId);
+        if (target) {
+          target.name = name;
+          target.start = start;
+          target.end = end;
+          target.rest = rest;
+          target.dayType = (!start && !end) ? 'leave' : 'normal';
+        }
+      } else {
+        // 新增班別
+        shiftPresets.push({
+          id: 'preset_' + Date.now(),
+          name,
+          start,
+          end,
+          rest,
+          dayType: (!start && !end) ? 'leave' : 'normal'
+        });
+      }
 
       savePresetsToStorage();
       renderPresetManagerList();
-      document.getElementById('newPresetName').value = '';
+      cancelEditPreset();
     }
 
     function deletePreset(id) {
@@ -468,11 +526,12 @@
         return;
       }
       shiftPresets = shiftPresets.filter(p => p.id !== id);
+      if (editingPresetId === id) cancelEditPreset();
       savePresetsToStorage();
       renderPresetManagerList();
     }
 
-    // 薪資設定與加班開關切換
+    // 薪資設定更新
     function updateSalaryConfig() {
       salaryConfig.hourlyRate = Math.max(0, parseFloat(document.getElementById('hourlyRateInput').value) || 0);
       salaryConfig.allowance = Math.max(0, parseFloat(document.getElementById('allowanceInput').value) || 0);
@@ -526,7 +585,7 @@
       calculateAndRenderSummary();
     }
 
-    // 工時計算核心（支援關閉加班）
+    // 工時計算核心
     function calculateShiftDuration(startStr, endStr, restMin, dayType) {
       if (dayType === 'leave' || !startStr || !endStr) {
         return { total: 0, regular: 0, ot1: 0, ot2: 0, ot3: 0, isLeave: true };
@@ -538,15 +597,14 @@
       let startMin = sH * 60 + sM;
       let endMin = eH * 60 + eM;
 
-      // 跨午夜
-      if (endMin <= startMin) endMin += 24 * 60;
+      if (endMin <= startMin) endMin += 24 * 60; // 支援跨夜班
 
       let netMinutes = endMin - startMin - (restMin || 0);
       if (netMinutes < 0) netMinutes = 0;
 
       const totalHours = Math.round((netMinutes / 60) * 10) / 10;
 
-      // 關鍵：如果關閉加班計算，所有時數皆算一般時薪工時
+      // 若關閉加班加成，整月所有工時一律視為一般時薪工時
       if (salaryConfig.disableOvertime) {
         return { total: totalHours, regular: totalHours, ot1: 0, ot2: 0, ot3: 0, isLeave: false };
       }
@@ -599,7 +657,7 @@
       document.getElementById('previewTotal').innerText = res.total.toFixed(1);
     }
 
-    // 日曆渲染：在日曆上直接顯示當天時數
+    // 月曆渲染：直覺顯示日期與工時標籤
     function renderCalendar() {
       const grid = document.getElementById('calendarGrid');
       grid.innerHTML = '';
@@ -636,7 +694,7 @@
           const hoursCalc = calculateShiftDuration(shift.start, shift.end, shift.rest, shift.dayType);
           const isLeave = shift.dayType === 'leave';
 
-          // 當天時數醒目標籤（顯示在日期旁）
+          // 月曆上直接呈現的工時標籤
           if (isLeave) {
             hoursBadge = `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300">休假</span>`;
           } else {
@@ -670,7 +728,7 @@
       }
     }
 
-    // 清單表格渲染
+    // 清單明細表渲染
     function renderListView() {
       const tbody = document.getElementById('listTableBody');
       tbody.innerHTML = '';
@@ -725,7 +783,7 @@
       });
     }
 
-    // 全月彙總結算
+    // 全月彙總試算
     function calculateAndRenderSummary() {
       const y = currentDate.getFullYear();
       const m = currentDate.getMonth() + 1;
@@ -906,7 +964,7 @@
 
       const summary = `【${y}年${m}月 工時與薪資結算】\n` +
         `• 時薪單價：NT$ ${salaryConfig.hourlyRate}/hr\n` +
-        `• 加班機制：${salaryConfig.disableOvertime ? '已關閉 (全純工時)' : '勞基法加成'}\n` +
+        `• 加班機制：${salaryConfig.disableOvertime ? '已關閉 (純工時計算)' : '勞基法加班加成'}\n` +
         `• 總出勤天數：${workDays}\n` +
         `• 當月總工時：${totHours} 小時\n` +
         `• 津貼加項：NT$ ${salaryConfig.allowance.toLocaleString()}\n` +
