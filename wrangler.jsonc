@@ -6,14 +6,11 @@
     "directory": "./WORK",
     "binding": "ASSETS"
   }
-  {
- 
   "kv_namespaces": [
     {
       "binding": "SHIFT_KV",
       "id": "fddefd7b431442418782035551a4ba76"
     }
   ],
-  }
 }
 
