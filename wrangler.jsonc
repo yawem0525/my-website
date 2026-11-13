@@ -5,7 +5,7 @@
   "assets": {
     "directory": "./WORK",
     "binding": "ASSETS"
-  }
+  },
   "kv_namespaces": 
     {
       "binding": "SHIFT_KV",
