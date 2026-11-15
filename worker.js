@@ -34,7 +34,7 @@ export default {
           createdAt: new Date().toISOString()
         }));
 
-        const token = await createSession(env.SHIFT_KV, username);
+        const token = await createSignedSession(username, env);
         return jsonResponseWithCookie({ success: true, username }, token);
       } catch (err) {
         return jsonResponse({ error: '註冊失敗: ' + err.message }, 500);
@@ -63,7 +63,7 @@ export default {
           return jsonResponse({ error: '密碼錯誤，請重新輸入' }, 401);
         }
 
-        const token = await createSession(env.SHIFT_KV, username);
+        const token = await createSignedSession(username, env);
         return jsonResponseWithCookie({ success: true, username }, token);
       } catch (err) {
         return jsonResponse({ error: '登入失敗: ' + err.message }, 500);
@@ -72,10 +72,6 @@ export default {
 
     // 3. 登出鎖定 API
     if (url.pathname === '/api/logout' && request.method === 'POST') {
-      const token = getSessionToken(request);
-      if (token && env.SHIFT_KV) {
-        await env.SHIFT_KV.delete(`sess_${token}`);
-      }
       return new Response(JSON.stringify({ success: true }), {
         status: 200,
         headers: {
@@ -85,16 +81,7 @@ export default {
       });
     }
 
-    // 4. 取得目前登入帳號資訊 API
-    if (url.pathname === '/api/me' && request.method === 'GET') {
-      const username = await getAuthenticatedUser(request, env);
-      if (!username) {
-        return jsonResponse({ error: '尚未登入' }, 401);
-      }
-      return jsonResponse({ username }, 200);
-    }
-
-    // 5. 個人專屬班表讀寫 API（依登入帳號隔離資料）
+    // 4. 個人專屬班表讀寫 API（依登入帳號隔離資料）
     if (url.pathname === '/api/schedule') {
       const username = await getAuthenticatedUser(request, env);
       if (!username) {
@@ -134,13 +121,13 @@ export default {
       return jsonResponse({ error: '不支援的請求方法' }, 405);
     }
 
-    // 6. 網頁門禁檢查：未登入者一律顯示登入／註冊畫面
+    // 5. 網頁門禁檢查：未登入者一律顯示登入／註冊畫面
     const loggedInUser = await getAuthenticatedUser(request, env);
     if (!loggedInUser) {
       return htmlResponse(renderAuthPage());
     }
 
-    // 7. 驗證通過，放行讀取 WORK 資料夾內的網頁
+    // 6. 驗證通過，放行讀取 WORK 資料夾內的網頁
     return env.ASSETS.fetch(request);
   }
 };
@@ -150,21 +137,35 @@ function normalizeUsername(raw) {
 }
 
 function isValidUsername(name) {
-  return /^[a-z0-9_\-\u4e00-\u9fa5]{2,20}$/i.test(name);
+  return /^[a-z0-9_\-\u4e00-\u9fa5]{2,20}\$/i.test(name);
 }
 
 async function hashPassword(password, salt) {
   const encoder = new TextEncoder();
   const data = encoder.encode(`${salt}::${password}`);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function createSession(kv, username) {
-  const token = crypto.randomUUID();
-  await kv.put(`sess_${token}`, username, { expirationTtl: 2592000 }); // 30天有效
-  return token;
+async function signHmac(message, secret) {
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, encoder.encode(message));
+  return Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function createSignedSession(username, env) {
+  const secret = env.SESSION_SECRET || 'shift_schedule_hmac_key_2026';
+  const expiresAt = Date.now() + 2592000 * 1000; // 30天有效
+  const payload = `${encodeURIComponent(username)}.${expiresAt}`;
+  const signature = await signHmac(payload, secret);
+  return `${payload}.${signature}`;
 }
 
 function getSessionToken(request) {
@@ -174,10 +175,20 @@ function getSessionToken(request) {
 }
 
 async function getAuthenticatedUser(request, env) {
-  if (!env.SHIFT_KV) return null;
   const token = getSessionToken(request);
   if (!token) return null;
-  return await env.SHIFT_KV.get(`sess_${token}`);
+
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+
+  const [encodedUser, expiresAtStr, signature] = parts;
+  if (Date.now() > Number(expiresAtStr)) return null;
+
+  const secret = env.SESSION_SECRET || 'shift_schedule_hmac_key_2026';
+  const expectedSig = await signHmac(`${encodedUser}.${expiresAtStr}`, secret);
+  if (signature !== expectedSig) return null;
+
+  return decodeURIComponent(encodedUser);
 }
 
 function jsonResponse(data, status = 200) {
@@ -228,7 +239,6 @@ function renderAuthPage() {
       <p class="text-xs text-slate-400">每個人擁有獨立加密雲端空間，資料互不干擾</p>
     </div>
 
-    <!-- 登入 / 註冊 分頁切換 -->
     <div class="grid grid-cols-2 gap-1 p-1 rounded-xl bg-slate-900/80 border border-slate-700 text-xs font-bold">
       <button type="button" id="tabLogin" onclick="switchMode('login')"
         class="py-2 rounded-lg bg-indigo-600 text-white transition">
@@ -307,6 +317,7 @@ function renderAuthPage() {
       try {
         const res = await fetch(endpoint, {
           method: 'POST',
+          credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password })
         });
@@ -320,7 +331,7 @@ function renderAuthPage() {
           return;
         }
 
-        window.location.reload();
+        window.location.replace('/');
       } catch (err) {
         errEl.innerText = '網路連線失敗，請稍後再試';
         errEl.classList.remove('hidden');
