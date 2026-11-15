@@ -7,6 +7,11 @@ export default {
       return jsonResponse({ error: '尚未在 Cloudflare 後台綁定 SHIFT_KV 資料庫' }, 503);
     }
 
+    // 0. 專屬登入與註冊頁面路由（任何情況下皆可直接開啟）
+    if (url.pathname === '/login') {
+      return htmlResponse(renderAuthPage());
+    }
+
     // 1. 註冊新帳號 API
     if (url.pathname === '/api/register' && request.method === 'POST') {
       try {
@@ -121,7 +126,7 @@ export default {
       return jsonResponse({ error: '不支援的請求方法' }, 405);
     }
 
-    // 5. 網頁門禁檢查：未登入者一律顯示登入／註冊畫面
+    // 5. 網頁門禁檢查：未登入者一律導向登入／註冊畫面
     const loggedInUser = await getAuthenticatedUser(request, env);
     if (!loggedInUser) {
       return htmlResponse(renderAuthPage());
@@ -137,7 +142,7 @@ function normalizeUsername(raw) {
 }
 
 function isValidUsername(name) {
-  return /^[a-z0-9_\-\u4e00-\u9fa5]{2,20}\$/i.test(name);
+  return /^[a-z0-9_\-\u4e00-\u9fa5]{2,20}$/i.test(name);
 }
 
 async function hashPassword(password, salt) {
@@ -162,7 +167,7 @@ async function signHmac(message, secret) {
 
 async function createSignedSession(username, env) {
   const secret = env.SESSION_SECRET || 'shift_schedule_hmac_key_2026';
-  const expiresAt = Date.now() + 2592000 * 1000; // 30天有效
+  const expiresAt = Date.now() + 2592000 * 1000;
   const payload = `${encodeURIComponent(username)}.${expiresAt}`;
   const signature = await signHmac(payload, secret);
   return `${payload}.${signature}`;
