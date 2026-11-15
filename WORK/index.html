@@ -409,7 +409,6 @@
       applyLocalStateToUI();
       renderAll();
 
-      // 向後端確認目前登入帳號並拉取專屬雲端資料
       await loadFromCloud(true);
     });
 
@@ -438,19 +437,24 @@
     }
 
     async function logoutAndLock() {
-      await fetch('/api/logout', { method: 'POST' });
-      window.location.reload();
+      try {
+        await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
+      } catch (e) {}
+      window.location.replace('/');
     }
 
     async function loadFromCloud(isSilent = false) {
       setCloudBadge('syncing', '🔄 正在載入個人雲端資料...');
 
       try {
-        const res = await fetch('/api/schedule', { method: 'GET' });
+        const res = await fetch('/api/schedule', {
+          method: 'GET',
+          credentials: 'same-origin'
+        });
         const result = await res.json();
 
         if (res.status === 401) {
-          window.location.reload();
+          setCloudBadge('error', '🔴 登入狀態已失效，請點擊右上角「登出」重新登入');
           return;
         }
 
@@ -485,7 +489,6 @@
           const timeStr = new Date().toLocaleTimeString('zh-TW', { hour12: false });
           setCloudBadge('success', `🟢 已同步 (${timeStr})`);
         } else {
-          // 新建立的帳號，初始化空白班表並寫入雲端
           shiftRecords = {};
           shiftPresets = JSON.parse(JSON.stringify(DEFAULT_PRESETS));
           salaryConfig = { hourlyRate: 190, allowance: 0, insurance: 0, disableOvertime: false };
@@ -513,6 +516,7 @@
       try {
         const res = await fetch('/api/schedule', {
           method: 'POST',
+          credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             shiftRecords,
@@ -523,7 +527,7 @@
         const result = await res.json();
 
         if (res.status === 401) {
-          window.location.reload();
+          setCloudBadge('error', '🔴 登入狀態已失效，請點擊右上角「登出」重新登入');
           return;
         }
 
