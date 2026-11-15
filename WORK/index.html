@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>班表工時與薪資計算器</title>
+  <title>班表工時與薪資計算器（個人雲端版）</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -42,14 +42,22 @@
       <div class="flex items-center gap-3">
         <span class="text-2xl">⏱️</span>
         <div>
-          <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">工時與薪資計算系統</h1>
-          <p class="text-xs text-slate-500 dark:text-slate-400">時薪純工時/加班自選 • 當日工時月曆顯示 • 常用班別自訂與編輯</p>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-bold text-slate-900 dark:text-white leading-tight">工時與薪資計算系統</h1>
+            <span id="currentUserBadge" class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-brand-50 text-brand-700 dark:bg-brand-950/60 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+              👤 載入中...
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 dark:text-slate-400">個人專屬加密空間 • 跨裝置自動同步</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
         <button onclick="openPresetManagerModal()" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
           <span>⚙️</span> 管理常用班別
+        </button>
+        <button onclick="logoutAndLock()" class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg border border-rose-200 dark:border-rose-900/60 bg-rose-50/70 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-300 transition" title="登出並切換帳號">
+          <span>🔒</span> 登出
         </button>
         <button onclick="toggleDarkMode()" class="p-2 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition" title="切換深淺色">
           <span id="themeIcon">🌙</span>
@@ -59,6 +67,31 @@
   </header>
 
   <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- 雲端同步狀態列 -->
+    <section class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <span class="text-xl">☁️</span>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-800 dark:text-white">個人雲端同步</span>
+            <span id="cloudSyncBadge" class="text-[11px] px-2 py-0.5 rounded-full font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300">
+              🔄 正在連線至雲端...
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-0.5">您的班表、常用班別與時薪僅保存在您自己的帳號下，其他使用者無法查看或修改</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="loadFromCloud(false)" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 transition">
+          ↓ 重新讀取
+        </button>
+        <button onclick="pushToCloud()" class="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition shadow-xs">
+          ↑ 立即備份上傳
+        </button>
+      </div>
+    </section>
 
     <!-- 薪資設定與開關列 -->
     <section class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
@@ -187,9 +220,7 @@
         <div>週五</div>
         <div class="text-rose-500">週六</div>
       </div>
-      <div id="calendarGrid" class="grid grid-cols-7 gap-1 min-h-[520px]">
-        <!-- 動態渲染日曆格子 -->
-      </div>
+      <div id="calendarGrid" class="grid grid-cols-7 gap-1 min-h-[520px]"></div>
     </section>
 
     <!-- 清單明細表 -->
@@ -226,7 +257,6 @@
         <button onclick="closeShiftModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold">✕</button>
       </div>
 
-      <!-- 快速帶入常用班別 -->
       <div>
         <div class="flex items-center justify-between mb-2">
           <label class="text-xs font-bold text-slate-500 dark:text-slate-400">常用班別選取：</label>
@@ -276,7 +306,6 @@
           </div>
         </div>
 
-        <!-- 試算即時預覽 -->
         <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/50 border border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs">
           <span class="text-slate-500 dark:text-slate-400">當日實質工時：</span>
           <span class="font-bold text-sm text-brand-600 dark:text-brand-400"><span id="previewTotal">0.0</span> 小時</span>
@@ -316,10 +345,8 @@
         <button onclick="closePresetManagerModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-white text-lg font-bold">✕</button>
       </div>
 
-      <!-- 現有班別清單 (支援編輯與刪除) -->
       <div class="flex-1 overflow-y-auto pr-1 space-y-2" id="presetListContainer"></div>
 
-      <!-- 新增 / 編輯 表單 -->
       <div class="pt-3 border-t border-slate-100 dark:border-slate-700 space-y-3">
         <div class="flex items-center justify-between">
           <h4 id="presetFormTitle" class="text-xs font-bold text-slate-700 dark:text-slate-300">＋ 新增班別</h4>
@@ -359,34 +386,165 @@
       { id: 'p_off',     name: '例休', start: '',      end: '',      rest: 0,  dayType: 'leave' }
     ];
 
+    let currentUser = 'guest';
     let currentDate = new Date();
-    let shiftRecords = JSON.parse(localStorage.getItem('shift_work_records')) || {};
-    let shiftPresets = JSON.parse(localStorage.getItem('shift_custom_presets')) || DEFAULT_PRESETS;
-    let salaryConfig = JSON.parse(localStorage.getItem('shift_salary_config')) || {
+    let shiftRecords = {};
+    let shiftPresets = JSON.parse(JSON.stringify(DEFAULT_PRESETS));
+    let salaryConfig = {
       hourlyRate: 190,
       allowance: 0,
       insurance: 0,
       disableOvertime: false
     };
 
-    // 常用班別編輯狀態管理
+    let syncTimeout = null;
     let editingPresetId = null;
 
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('DOMContentLoaded', async () => {
       if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
         document.getElementById('themeIcon').innerText = '☀️';
       }
 
+      applyLocalStateToUI();
+      renderAll();
+
+      // 向後端確認目前登入帳號並拉取專屬雲端資料
+      await loadFromCloud(true);
+    });
+
+    function getStoragePrefix() {
+      return `shift_user_${currentUser}`;
+    }
+
+    function applyLocalStateToUI() {
       document.getElementById('hourlyRateInput').value = salaryConfig.hourlyRate;
       document.getElementById('allowanceInput').value = salaryConfig.allowance;
       document.getElementById('insuranceInput').value = salaryConfig.insurance;
       document.getElementById('disableOvertimeToggle').checked = !!salaryConfig.disableOvertime;
       updateOvertimeUI();
-
       renderPresetButtons();
-      renderAll();
-    });
+    }
+
+    function setCloudBadge(type, text) {
+      const badge = document.getElementById('cloudSyncBadge');
+      const styles = {
+        syncing: 'bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300',
+        success: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300',
+        error: 'bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300'
+      };
+      badge.className = `text-[11px] px-2 py-0.5 rounded-full font-semibold ${styles[type] || styles.syncing}`;
+      badge.innerText = text;
+    }
+
+    async function logoutAndLock() {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.reload();
+    }
+
+    async function loadFromCloud(isSilent = false) {
+      setCloudBadge('syncing', '🔄 正在載入個人雲端資料...');
+
+      try {
+        const res = await fetch('/api/schedule', { method: 'GET' });
+        const result = await res.json();
+
+        if (res.status === 401) {
+          window.location.reload();
+          return;
+        }
+
+        if (!res.ok) {
+          setCloudBadge('error', `🔴 ${result.error || '同步失敗'}`);
+          if (!isSilent) alert(result.error || '無法連線至雲端資料庫');
+          return;
+        }
+
+        if (result.username) {
+          currentUser = result.username;
+          document.getElementById('currentUserBadge').innerText = `👤 ${currentUser}`;
+        }
+
+        if (result.data) {
+          shiftRecords = result.data.shiftRecords || {};
+          shiftPresets = (Array.isArray(result.data.shiftPresets) && result.data.shiftPresets.length > 0)
+            ? result.data.shiftPresets
+            : JSON.parse(JSON.stringify(DEFAULT_PRESETS));
+          salaryConfig = {
+            hourlyRate: 190,
+            allowance: 0,
+            insurance: 0,
+            disableOvertime: false,
+            ...(result.data.salaryConfig || {})
+          };
+
+          persistLocalOnly();
+          applyLocalStateToUI();
+          renderAll();
+
+          const timeStr = new Date().toLocaleTimeString('zh-TW', { hour12: false });
+          setCloudBadge('success', `🟢 已同步 (${timeStr})`);
+        } else {
+          // 新建立的帳號，初始化空白班表並寫入雲端
+          shiftRecords = {};
+          shiftPresets = JSON.parse(JSON.stringify(DEFAULT_PRESETS));
+          salaryConfig = { hourlyRate: 190, allowance: 0, insurance: 0, disableOvertime: false };
+          applyLocalStateToUI();
+          renderAll();
+          await pushToCloud();
+        }
+      } catch (err) {
+        setCloudBadge('error', '🔴 無法連線至雲端 API');
+      }
+    }
+
+    function triggerAutoCloudSync() {
+      persistLocalOnly();
+      clearTimeout(syncTimeout);
+      setCloudBadge('syncing', '🔄 準備自動儲存至雲端...');
+      syncTimeout = setTimeout(() => {
+        pushToCloud();
+      }, 600);
+    }
+
+    async function pushToCloud() {
+      setCloudBadge('syncing', '🔄 正在儲存至個人雲端...');
+
+      try {
+        const res = await fetch('/api/schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            shiftRecords,
+            shiftPresets,
+            salaryConfig
+          })
+        });
+        const result = await res.json();
+
+        if (res.status === 401) {
+          window.location.reload();
+          return;
+        }
+
+        if (!res.ok) {
+          setCloudBadge('error', `🔴 ${result.error || '儲存失敗'}`);
+          return;
+        }
+
+        const timeStr = new Date().toLocaleTimeString('zh-TW', { hour12: false });
+        setCloudBadge('success', `🟢 已永久儲存 (${timeStr})`);
+      } catch (err) {
+        setCloudBadge('error', '🔴 雲端儲存連線失敗');
+      }
+    }
+
+    function persistLocalOnly() {
+      const prefix = getStoragePrefix();
+      localStorage.setItem(`${prefix}_records`, JSON.stringify(shiftRecords));
+      localStorage.setItem(`${prefix}_presets`, JSON.stringify(shiftPresets));
+      localStorage.setItem(`${prefix}_config`, JSON.stringify(salaryConfig));
+    }
 
     function toggleDarkMode() {
       const isDark = document.documentElement.classList.toggle('dark');
@@ -394,10 +552,9 @@
       document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
     }
 
-    // 常用班別儲存與動態生成
-    function savePresetsToStorage() {
-      localStorage.setItem('shift_custom_presets', JSON.stringify(shiftPresets));
+    function savePresetsAndSync() {
       renderPresetButtons();
+      triggerAutoCloudSync();
     }
 
     function renderPresetButtons() {
@@ -452,7 +609,6 @@
       `).join('');
     }
 
-    // 點擊「編輯」將特定班別帶入表單修改
     function editPreset(id) {
       const p = shiftPresets.find(item => item.id === id);
       if (!p) return;
@@ -468,7 +624,6 @@
       document.getElementById('btnCancelEditPreset').classList.remove('hidden');
     }
 
-    // 取消編輯模式
     function cancelEditPreset() {
       editingPresetId = null;
       document.getElementById('newPresetName').value = '';
@@ -481,7 +636,6 @@
       document.getElementById('btnCancelEditPreset').classList.add('hidden');
     }
 
-    // 儲存班別（自動區分新增或修改）
     function savePreset() {
       const name = document.getElementById('newPresetName').value.trim();
       const start = document.getElementById('newPresetStart').value;
@@ -494,7 +648,6 @@
       }
 
       if (editingPresetId) {
-        // 更新現有班別
         const target = shiftPresets.find(p => p.id === editingPresetId);
         if (target) {
           target.name = name;
@@ -504,7 +657,6 @@
           target.dayType = (!start && !end) ? 'leave' : 'normal';
         }
       } else {
-        // 新增班別
         shiftPresets.push({
           id: 'preset_' + Date.now(),
           name,
@@ -515,7 +667,7 @@
         });
       }
 
-      savePresetsToStorage();
+      savePresetsAndSync();
       renderPresetManagerList();
       cancelEditPreset();
     }
@@ -527,23 +679,22 @@
       }
       shiftPresets = shiftPresets.filter(p => p.id !== id);
       if (editingPresetId === id) cancelEditPreset();
-      savePresetsToStorage();
+      savePresetsAndSync();
       renderPresetManagerList();
     }
 
-    // 薪資設定更新
     function updateSalaryConfig() {
       salaryConfig.hourlyRate = Math.max(0, parseFloat(document.getElementById('hourlyRateInput').value) || 0);
       salaryConfig.allowance = Math.max(0, parseFloat(document.getElementById('allowanceInput').value) || 0);
       salaryConfig.insurance = Math.max(0, parseFloat(document.getElementById('insuranceInput').value) || 0);
-      localStorage.setItem('shift_salary_config', JSON.stringify(salaryConfig));
+      triggerAutoCloudSync();
       calculateAndRenderSummary();
       renderListView();
     }
 
     function toggleOvertimeConfig() {
       salaryConfig.disableOvertime = document.getElementById('disableOvertimeToggle').checked;
-      localStorage.setItem('shift_salary_config', JSON.stringify(salaryConfig));
+      triggerAutoCloudSync();
       updateOvertimeUI();
       renderAll();
     }
@@ -585,7 +736,6 @@
       calculateAndRenderSummary();
     }
 
-    // 工時計算核心
     function calculateShiftDuration(startStr, endStr, restMin, dayType) {
       if (dayType === 'leave' || !startStr || !endStr) {
         return { total: 0, regular: 0, ot1: 0, ot2: 0, ot3: 0, isLeave: true };
@@ -597,14 +747,13 @@
       let startMin = sH * 60 + sM;
       let endMin = eH * 60 + eM;
 
-      if (endMin <= startMin) endMin += 24 * 60; // 支援跨夜班
+      if (endMin <= startMin) endMin += 24 * 60;
 
       let netMinutes = endMin - startMin - (restMin || 0);
       if (netMinutes < 0) netMinutes = 0;
 
       const totalHours = Math.round((netMinutes / 60) * 10) / 10;
 
-      // 若關閉加班加成，整月所有工時一律視為一般時薪工時
       if (salaryConfig.disableOvertime) {
         return { total: totalHours, regular: totalHours, ot1: 0, ot2: 0, ot3: 0, isLeave: false };
       }
@@ -657,7 +806,6 @@
       document.getElementById('previewTotal').innerText = res.total.toFixed(1);
     }
 
-    // 月曆渲染：直覺顯示日期與工時標籤
     function renderCalendar() {
       const grid = document.getElementById('calendarGrid');
       grid.innerHTML = '';
@@ -694,7 +842,6 @@
           const hoursCalc = calculateShiftDuration(shift.start, shift.end, shift.rest, shift.dayType);
           const isLeave = shift.dayType === 'leave';
 
-          // 月曆上直接呈現的工時標籤
           if (isLeave) {
             hoursBadge = `<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300">休假</span>`;
           } else {
@@ -728,7 +875,6 @@
       }
     }
 
-    // 清單明細表渲染
     function renderListView() {
       const tbody = document.getElementById('listTableBody');
       tbody.innerHTML = '';
@@ -783,7 +929,6 @@
       });
     }
 
-    // 全月彙總試算
     function calculateAndRenderSummary() {
       const y = currentDate.getFullYear();
       const m = currentDate.getMonth() + 1;
@@ -889,7 +1034,7 @@
       const note = document.getElementById('shiftNote').value.trim();
 
       shiftRecords[dateStr] = { title, start, end, rest, dayType, note };
-      localStorage.setItem('shift_work_records', JSON.stringify(shiftRecords));
+      triggerAutoCloudSync();
 
       closeShiftModal();
       renderAll();
@@ -904,7 +1049,7 @@
     function deleteShiftByDate(dateStr) {
       if (confirm(`確定要刪除 ${dateStr} 的排班紀錄嗎？`)) {
         delete shiftRecords[dateStr];
-        localStorage.setItem('shift_work_records', JSON.stringify(shiftRecords));
+        triggerAutoCloudSync();
         renderAll();
       }
     }
@@ -950,7 +1095,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `班表工時明細_${monthPrefix}.csv`;
+      a.download = `班表工時明細_${currentUser}_${monthPrefix}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -962,9 +1107,9 @@
       const totHours = document.getElementById('statTotalHours').innerText;
       const netPay = document.getElementById('statNetSalary').innerText;
 
-      const summary = `【${y}年${m}月 工時與薪資結算】\n` +
+      const summary = `【${currentUser} - ${y}年${m}月 工時與薪資結算】\n` +
         `• 時薪單價：NT$ ${salaryConfig.hourlyRate}/hr\n` +
-        `• 加班機制：${salaryConfig.disableOvertime ? '已關閉 (純工時計算)' : '勞基法加班加成'}\n` +
+        `• 加班機制：${salaryConfig.disableOvertime ? '已關閉 (全純工時計算)' : '勞基法加班加成'}\n` +
         `• 總出勤天數：${workDays}\n` +
         `• 當月總工時：${totHours} 小時\n` +
         `• 津貼加項：NT$ ${salaryConfig.allowance.toLocaleString()}\n` +
