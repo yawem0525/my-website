@@ -4,13 +4,13 @@
   "compatibility_date": "2026-11-01",
   "assets": {
     "directory": "./WORK",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": true
   },
   "kv_namespaces": [
     {
       "binding": "SHIFT_KV",
-      "id": "fddefd7b431442418782035551a4ba76"
+      "id": "保留你原本的KV資料庫ID"
     }
-]
+  ]
 }
-
