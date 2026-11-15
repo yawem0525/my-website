@@ -137,7 +137,7 @@ function normalizeUsername(raw) {
 }
 
 function isValidUsername(name) {
-  return /^[a-z0-9_\-\u4e00-\u9fa5]{2,20}$/i.test(name);
+  return /^[a-z0-9_\-\u4e00-\u9fa5]{2,20}\$/i.test(name);
 }
 
 async function hashPassword(password, salt) {
